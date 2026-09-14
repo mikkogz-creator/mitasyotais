@@ -10,51 +10,61 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { styles = [], budget = "80 €", allergies = [], customDislikes = "" } = req.body;
+    const { styles = [], budget = "100 €", allergies = [], customDislikes = "" } = req.body;
 
     const prompt = `
-Olet suomalaisen arjen ja lapsiperheiden ruokasuunnittelun asiantuntija.
-Laadi ateriasuunnitelma ja kauppalista 7 PÄIVÄLLE (Maanantai, Tiistai, Keskiviikko, Torstai, Perjantai, Lauantai, Sunnuntai).
+Olet suomalaisen arjen ja perheruokien huippuasiantuntija.
+Laadi ateriasuunnitelma ja kauppalista 7 PÄIVÄLLE (Maanantai - Sunnuntai).
 
-Käyttäjän toiveet:
-- Ruokatyylit: ${styles.join(", ") || "Perinteinen kotiruoka"}
-- Viikkobudjettiarvio (n. 4 henkeä): ${budget}
+Käyttäjän valinnat:
+- Ruokateemat: ${styles.join(", ") || "Perinteinen kotiruoka"}
+- Viikkobudjetti (n. 4 hlöä): ${budget}
 - Rajoitteet ja allergiat: ${allergies.join(", ") || "Ei erityisiä"}
 - Muut toiveet/huomiot: ${customDislikes || "Ei ole"}
 
-OHJEET:
-1. Huomioi EHDOTTOMASTI kaikki ilmoitetut allergiat ja rajoitteet.
-2. Ainesosien pitää olla tuttuja ja helposti saatavia suomalaisista S- ja K-ryhmän kaupoista (Prisma, S-market, K-Citymarket, K-Supermarket). Käytä selkeitä määriä (esim. "400g jauhelihaa", "1 prk (2dl) ruokakermaa", "500g porkkanoita").
-3. Anna jokaiselle aterialle selkeät ja ytimekkäät valmistusohjeet (3-5 vaihetta), jotka kiireinenkin kotikokki ymmärtää.
-4. Yhdistä koko viikon raaka-aineista kattava kauppalista (groceries) kategorioittain tai selkeänä listana.
+KRIITTISET SÄÄNNÖT RAAKA-AINEILLE JA KAUPPALISTALLE:
+1. Käytä AINOASTAAN aitoja, tavallisia suomalaisten S-ryhmän (Prisma, S-market) ja K-ryhmän (K-Citymarket, K-Supermarket) valikoimista löytyviä tuotteita.
+2. ÄLÄ KOSKAAN keksi ulkomaisia tuotteita (ei kosher-suolaa, heavy creamia tms.). Käytä tuttuja tuotteita: kuohukerma, ruokakerma, naudan jauheliha, kirjolohifilee, maustamaton jogurtti, tomaattimurska jne.
+3. Huomioi allergiat (esim. gluteeniton makaroni, laktoositon maito/kerma).
+4. Palauta ostoslistalla (groceries) jokaisesta tuotteesta:
+   - "name": Selkeä reseptinimi määrineen (esim. "Naudan jauheliha 10% (400 g)", "Gluteeniton makaroni (400 g)", "Porkkana (1 kg)")
+   - "searchTerm": Kaupan hakukoneelle sopiva puhdas perusmuotoinen hakusana ILMAN määriä tai pakkauskokoja (esim. "naudan jauheliha", "gluteeniton makaroni", "porkkana", "laktoositon ruokakerma").
 
-Palauta vastaus AINOASTAAN JSON-muodossa, ilman markdown-koodiblokkeja:
+Vastaa AINOASTAAN JSON-muodossa:
 {
   "meals": [
     {
       "day": "Maanantai",
-      "name": "Ruoan nimi",
+      "name": "Aterian nimi",
       "time": "Valmistusaika esim. 25 min",
-      "info": "Lyhyt kuvaus miksi tämä sopii arkeen",
+      "info": "Lyhyt kuvaus sopivuudesta arkeen",
       "ingredients": [
-        "400 g jauhelihaa",
-        "1 pss (400 g) makaronia",
-        "5 dl kevytmaitoa (laktoositon)",
+        "400 g naudan jauhelihaa",
+        "400 g gluteenitonta makaronia",
+        "5 dl laktoositonta kevytmaitoa",
         "2 kpl kananmunia"
       ],
       "instructions": [
-        "Keitä makaronit suolalla maustetussa vedessä pakkauksen ohjeen mukaan.",
-        "Ruskista jauheliha pannulla ja mausta suolalla, pippurilla ja paprikalla.",
-        "Sekoita maito ja munat munamaidoksi kulhossa.",
-        "Sekoita makaronit ja jauheliha uunivuoassa, kaada munamaito päälle.",
-        "Paista 200 asteessa uunin alatasolla noin 40 minuuttia."
+        "Keitä makaronit suolalla maustetussa vedessä.",
+        "Ruskista jauheliha pannulla ja mausta.",
+        "Sekoita maito ja munat kulhossa.",
+        "Yhdistä ainekset uunivuoassa ja paista 200 asteessa n. 40 min."
       ]
     }
   ],
   "groceries": [
-    "400 g jauhelihaa",
-    "makaroni 400 g",
-    "kevytmaito 1 l"
+    {
+      "name": "Naudan jauheliha (400 g)",
+      "searchTerm": "naudan jauheliha"
+    },
+    {
+      "name": "Gluteeniton makaroni (400 g)",
+      "searchTerm": "gluteeniton makaroni"
+    },
+    {
+      "name": "Laktoositon kevytmaito (1 l)",
+      "searchTerm": "laktoositon kevytmaito"
+    }
   ]
 }
 `;

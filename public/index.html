@@ -68,12 +68,13 @@
     .btn-export:hover { background: #f8fafc; }
 
     /* Kauppalista kohteet */
-    .grocery-item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    .grocery-item-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f1f5f9; }
     .grocery-item-row:last-child { border-bottom: none; }
-    .grocery-left { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; }
+    .grocery-left { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 500; cursor: pointer; }
     .grocery-left input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .grocery-left.checked span { text-decoration: line-through; color: var(--text-muted); }
     .grocery-links { display: flex; gap: 6px; }
-    .store-link { font-size: 0.74rem; font-weight: 700; text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: opacity 0.15s; }
+    .store-link { font-size: 0.74rem; font-weight: 700; text-decoration: none; padding: 5px 9px; border-radius: 6px; transition: opacity 0.15s; }
     .store-link:hover { opacity: 0.85; }
     .store-link.k { background: #ffede5; color: #ea580c; }
     .store-link.s { background: #e6f9ed; color: #16a34a; }
@@ -195,16 +196,14 @@
     <div id="result-section">
       <!-- Kauppalista -->
       <div class="grocery-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div>
-            <h2 style="font-size: 1.15rem; font-weight: 800;">🛒 Koko viikon kauppalista</h2>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Voit klikata suoraan K- tai S-hakuun:</div>
-          </div>
+        <div style="margin-bottom: 14px;">
+          <h2 style="font-size: 1.15rem; font-weight: 800;">🛒 Koko viikon kauppalista (S- ja K-valikoima)</h2>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Klikkaa kaupan nappia hakeaksesi suoraan valikoimasta:</div>
         </div>
         <div id="grocery-items-container"></div>
         <div class="export-buttons">
-          <button class="btn-export" onclick="copyFullList('WhatsApp')">💬 Kopioi WhatsAppiin</button>
-          <button class="btn-export" onclick="copyCleanList()">📋 Kopioi ostoslistana (teksti)</button>
+          <button class="btn-export" onclick="copyFullList()">💬 Kopioi WhatsAppiin</button>
+          <button class="btn-export" onclick="copySearchTerms()">📋 Kopioi kauppahaun sanalista</button>
         </div>
       </div>
 
@@ -276,18 +275,15 @@
       card.classList.toggle('open');
     }
 
+    function toggleCheck(label) {
+      label.classList.toggle('checked');
+    }
+
     function showToast(text) {
       const t = document.getElementById('toast');
       t.innerText = text;
       t.style.display = 'block';
       setTimeout(() => { t.style.display = 'none'; }, 2500);
-    }
-
-    function getSearchTerm(item) {
-      return item
-        .replace(/^\d+([,.]\d+)?\s*(g|kg|dl|l|ml|pss|prk|rkl|tl|kpl|pkt)\b\s*/i, '')
-        .replace(/\(.*?\)/g, '')
-        .trim();
     }
 
     async function generateMealPlan() {
@@ -312,18 +308,21 @@
         const data = await response.json();
         currentGroceries = data.groceries || [];
 
-        // Rakennetaan interaktiivinen ostoslista suorilla kauppahakulinjoilla
+        // Rakennetaan interaktiivinen ostoslista optimoiduilla kauppahauilla
         const groceryContainer = document.getElementById('grocery-items-container');
         groceryContainer.innerHTML = currentGroceries.map((item, idx) => {
-          const searchKeyword = encodeURIComponent(getSearchTerm(item));
+          const displayName = typeof item === 'string' ? item : item.name;
+          const term = (typeof item === 'object' && item.searchTerm) ? item.searchTerm : displayName.replace(/^\d+.*?\s/, '');
+          const searchKeyword = encodeURIComponent(term);
+          
           const kUrl = `https://www.k-ruoka.fi/kauppa/tuotehaku?haku=${searchKeyword}`;
           const sUrl = `https://www.s-kaupat.fi/haku?q=${searchKeyword}`;
 
           return `
             <div class="grocery-item-row">
-              <label class="grocery-left">
-                <input type="checkbox" id="chk-${idx}">
-                <span>${item}</span>
+              <label class="grocery-left" onclick="toggleCheck(this)">
+                <input type="checkbox" id="chk-${idx}" onclick="event.stopPropagation()">
+                <span>${displayName}</span>
               </label>
               <div class="grocery-links">
                 <a href="${kUrl}" target="_blank" class="store-link k">🟠 K-Ruoka</a>
@@ -387,18 +386,19 @@
       updateStepUI();
     }
 
-    function copyFullList(target) {
+    function copyFullList() {
       if (!currentGroceries || currentGroceries.length === 0) return;
-      const msg = '🛒 *Mitä syötäis? - Kauppalista*\n\n• ' + currentGroceries.join('\n• ');
+      const lines = currentGroceries.map(item => '• ' + (typeof item === 'string' ? item : item.name));
+      const msg = '🛒 *Mitä syötäis? - Kauppalista*\n\n' + lines.join('\n');
       navigator.clipboard.writeText(msg);
       showToast('Kopioitu WhatsApp-muotoon!');
     }
 
-    function copyCleanList() {
+    function copySearchTerms() {
       if (!currentGroceries || currentGroceries.length === 0) return;
-      const msg = currentGroceries.join('\n');
-      navigator.clipboard.writeText(msg);
-      showToast('Kopioitu ostoslistana (1 rivi per tuote)!');
+      const terms = currentGroceries.map(item => (typeof item === 'object' && item.searchTerm) ? item.searchTerm : item);
+      navigator.clipboard.writeText(terms.join('\n'));
+      showToast('Kopioitu hakusanat (1 rivi per tuote)!');
     }
   </script>
 </body>
