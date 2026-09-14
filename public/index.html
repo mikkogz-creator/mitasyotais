@@ -23,7 +23,11 @@
     header { background: #ffffff; border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
     .brand { font-size: 1.3rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 6px; }
     .brand span { background: var(--primary-soft); padding: 2px 8px; border-radius: 99px; font-size: 0.72rem; color: var(--primary); }
+<<<<<<< HEAD
     .container { max-width: 660px; margin: 30px auto; padding: 0 20px; }
+=======
+    .container { max-width: 620px; margin: 30px auto; padding: 0 20px; }
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
     .hero-text { text-align: center; margin-bottom: 24px; }
     .hero-text h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
     .hero-text p { color: var(--text-muted); font-size: 0.95rem; }
@@ -129,7 +133,11 @@
         <div class="tag-item" onclick="toggleTag(this)">🍲 Helppoja uuni- ja peltiruokia</div>
         <div class="tag-item" onclick="toggleTag(this)">🐟 Vähintään 1 kalaruoka</div>
         <div class="tag-item" onclick="toggleTag(this)">🥕 Paljon kasviksia lapsille</div>
+<<<<<<< HEAD
         <div class="tag-item" onclick="toggleTag(this)">🍕 Viikonloppuherkku</div>
+=======
+        <div class="tag-item" onclick="toggleTag(this)">🍕 Perjantaiherkku</div>
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
       </div>
     </div>
 
@@ -140,12 +148,21 @@
         <div class="step-title">Mikä olisi suuntaa antava viikkobudjetti?</div>
       </div>
       <div class="budget-box">
+<<<<<<< HEAD
         <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Arvioitu ruokakauppabudjetti 7 päivälle (n. 4 hlöä):</div>
         <div class="budget-number" id="budget-val">100 €</div>
         <input type="range" id="budget-input" min="60" max="200" step="10" value="100" oninput="document.getElementById('budget-val').innerText = this.value + ' €'">
         <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
           <span>60 € (Säästöviikko)</span>
           <span>200 € (Runsaampi viikko)</span>
+=======
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Arvioitu ruokakauppabudjetti 5 arkipäivälle (n. 4 hlöä):</div>
+        <div class="budget-number" id="budget-val">80 €</div>
+        <input type="range" id="budget-input" min="50" max="150" step="10" value="80" oninput="document.getElementById('budget-val').innerText = this.value + ' €'">
+        <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+          <span>50 € (Edullinen arki)</span>
+          <span>150 € (Reilumpi budjetti)</span>
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
         </div>
       </div>
     </div>
@@ -182,20 +199,28 @@
     <!-- Tulokset -->
     <div id="result-section">
       <div class="export-bar">
+<<<<<<< HEAD
         <div>
           <div style="font-size: 0.9rem; font-weight: 800;">🛒 Koko viikon kauppalista:</div>
           <div style="font-size: 0.78rem; color: var(--text-muted);">S- ja K-ruokakaupoista</div>
         </div>
+=======
+        <span style="font-size: 0.9rem; font-weight: 700;">🛒 Kauppalista valmis:</span>
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
         <div style="display: flex; gap: 6px;">
           <button class="btn-export" onclick="copyList('S-kaupat')">🟢 S-kaupat</button>
           <button class="btn-export" onclick="copyList('K-Ruoka')">🟠 K-Ruoka</button>
           <button class="btn-export" onclick="copyList('WhatsApp')">💬 WhatsApp</button>
         </div>
       </div>
+<<<<<<< HEAD
       <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
         <h2 style="font-size: 1.25rem; font-weight: 800;">Viikon 7 ateriaa:</h2>
         <span style="font-size: 0.8rem; color: var(--text-muted);">💡 Klikkaa päivää nähdäksesi reseptin</span>
       </div>
+=======
+      <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 12px;">Viikon ateriat:</h2>
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
       <div id="meals-list"></div>
       <button class="btn-prev" onclick="resetForm()" style="width: 100%; margin-top: 16px;">🔄 Suunnittele uusi viikko</button>
     </div>
@@ -229,9 +254,17 @@
       prevBtn.style.display = (currentStep > 1) ? 'block' : 'none';
 
       if (currentStep === totalSteps) {
+<<<<<<< HEAD
         nextBtn.innerHTML = '✨ Luo 7 päivän suunnitelma';
       } else {
         nextBtn.innerHTML = 'Seuraava ➔';
+=======
+        nextBtn.innerHTML = '✨ Luo viikkosuunnitelma';
+        nextBtn.style.backgroundColor = '#059669';
+      } else {
+        nextBtn.innerHTML = 'Seuraava ➔';
+        nextBtn.style.backgroundColor = '#059669';
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
       }
     }
 
@@ -255,10 +288,13 @@
       el.classList.toggle('active');
     }
 
+<<<<<<< HEAD
     function toggleMealAccordion(card) {
       card.classList.toggle('open');
     }
 
+=======
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
     function showToast(text) {
       const t = document.getElementById('toast');
       t.innerText = text;
@@ -268,7 +304,11 @@
 
     async function generateMealPlan() {
       const btn = document.getElementById('btn-next');
+<<<<<<< HEAD
       btn.innerText = '⏳ Suunnitellaan 7 päivää ja reseptejä...';
+=======
+      btn.innerText = '⏳ Luodaan viikkosuunnitelmaa...';
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
       btn.disabled = true;
 
       const styles = Array.from(document.querySelectorAll('#style-group .tag-item.active')).map(e => e.innerText.replace(/^[^\s]+\s/, ''));
@@ -289,6 +329,7 @@
         currentGroceries = data.groceries || [];
 
         const mealsContainer = document.getElementById('meals-list');
+<<<<<<< HEAD
         mealsContainer.innerHTML = data.meals.map(m => {
           const ingrHtml = (m.ingredients || []).map(i => `<li>${i}</li>`).join('');
           const instHtml = (m.instructions || []).map(step => `<li>${step}</li>`).join('');
@@ -316,6 +357,17 @@
           `;
         }).join('');
 
+=======
+        mealsContainer.innerHTML = data.meals.map(m => `
+          <div class="meal-box">
+            <div class="meal-day">${m.day}</div>
+            <div class="meal-title">${m.name}</div>
+            <div class="meal-meta">⏱️ ${m.time} • ${m.info}</div>
+          </div>
+        `).join('');
+
+        // Piilotetaan kyselykortit ja edistymispalkki, näytetään tulos
+>>>>>>> c096d6abdfc4b05d7566ec7796ef90e401eae9b6
         for (let i = 1; i <= totalSteps; i++) {
           document.getElementById(`step-${i}`).style.display = 'none';
         }
